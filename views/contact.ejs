@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<nav>
+    <a href="/">Inicio</a>
+    <a href="/about">Acerca</a>
+    <a href="/services">Servicios</a>
+    <a href="/contact">Contacto</a>
+</nav>
+
+<div class="container">
+
+<h1>Contáctanos</h1>
+<p>Déjanos tu mensaje y te responderemos lo antes posible.</p>
+
+<!-- ALERTA -->
+<div id="alerta" class="alerta"></div>
+
+<!-- FORMULARIO -->
+<form id="contactForm">
+    <input type="text" name="nombre" placeholder="Tu nombre" required>
+    <input type="email" name="email" placeholder="Tu correo" required>
+    <textarea name="mensaje" placeholder="Escribe tu mensaje..." required></textarea>
+    <button type="submit">Enviar</button>
+</form>
+
+</div>
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const res = await fetch("/contact", {
+        method: "POST",
+        body: new URLSearchParams(formData)
+    });
+
+    const mensaje = await res.text();
+
+    const alerta = document.getElementById("alerta");
+    alerta.innerText = mensaje;
+    alerta.style.display = "block";
+
+    // Ocultar después de 3 segundos
+    setTimeout(() => {
+        alerta.style.display = "none";
+    }, 3000);
+
+    this.reset();
+});
+</script>
+
+</body>
+</html>
